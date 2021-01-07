@@ -6,10 +6,23 @@ import java.awt.*;
 import java.time.Instant;
 
 public class JDACommand {
+    ACommandInfo aCommandInfo;
     CommandReceivedEvent e;
 
     protected void execute(CommandReceivedEvent e) {
         e.getChannel().sendMessage("Something is wrong! Contact the creator.").queue();
+    }
+
+    protected void guildOnly(CommandReceivedEvent e) {
+        e.getChannel().sendMessage("This command is guild only!").queue();
+    }
+
+    protected void botModeratorOnly(CommandReceivedEvent e) {
+        e.getChannel().sendMessage("This command is only for bot moderators!").queue();
+    }
+
+    protected void serverModeratorOnly(CommandReceivedEvent e) {
+        e.getChannel().sendMessage("This command is only for server moderators").queue();
     }
 
     protected EmbedBuilder getDefaultEmbed() {
@@ -24,5 +37,13 @@ public class JDACommand {
 
     protected void setEvent(CommandReceivedEvent e) {
         this.e = e;
+    }
+
+    public void setCommandInfo(ACommandInfo aCommandInfo) {
+        this.aCommandInfo = aCommandInfo;
+    }
+
+    public ACommandInfo getCommandInfo() {
+        return aCommandInfo;
     }
 }

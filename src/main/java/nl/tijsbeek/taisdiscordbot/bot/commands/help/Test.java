@@ -1,10 +1,11 @@
 package nl.tijsbeek.taisdiscordbot.bot.commands.help;
 
-import nl.tijsbeek.taisdiscordbot.bot.commands.ACommand;
+import net.dv8tion.jda.api.entities.Member;
+import nl.tijsbeek.taisdiscordbot.bot.commands.ACommandInfo;
 import nl.tijsbeek.taisdiscordbot.bot.commands.CommandReceivedEvent;
 import nl.tijsbeek.taisdiscordbot.bot.commands.JDACommand;
 
-@ACommand(
+@ACommandInfo(
         commandAliases = {"test"},
         category = "test",
         exampleCommand = "test",
@@ -16,6 +17,10 @@ public class Test extends JDACommand {
     protected void execute(CommandReceivedEvent e) {
         super.setEvent(e);
 
+        Member member = e.getMember();
 
+        e.getChannel().sendMessage("Voice state is null: " + (member.getVoiceState() == null)).queue();
+        e.getChannel().sendMessage("Is In voice channel: " + member.getVoiceState().inVoiceChannel()).queue();
+        e.getChannel().sendMessage("In channel: " + member.getVoiceState().getChannel()).queue();
     }
 }

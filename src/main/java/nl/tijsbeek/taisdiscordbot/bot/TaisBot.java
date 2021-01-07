@@ -26,12 +26,6 @@ public class TaisBot {
                             GatewayIntent.GUILD_MESSAGES,
                             GatewayIntent.DIRECT_MESSAGES
                     )
-                    .disableCache(
-                            CacheFlag.CLIENT_STATUS,
-                            CacheFlag.EMOTE,
-                            CacheFlag.MEMBER_OVERRIDES,
-                            CacheFlag.ROLE_TAGS
-                    )
                     .enableCache(
                             CacheFlag.VOICE_STATE
                     )

@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class CommandMap {
     private final HashMap<String, JDACommand> commands = new HashMap<>();
-    private final ArrayList<ACommand> fullCommandList = new ArrayList<>();
+    private final ArrayList<ACommandInfo> fullCommandList = new ArrayList<>();
     private final ArrayList<String> categories = new ArrayList<>();
 
     private static final CommandMap commandMap = new CommandMap();
@@ -28,14 +28,20 @@ public class CommandMap {
     }
 
     private boolean hasCommandAnnotation(ClassInfo classInfo) {
-        return classInfo.hasAnnotation(ACommand.class.getName());
+        return classInfo.hasAnnotation(ACommandInfo.class.getName());
     }
 
     private void addCommandClass(Class<?> aClass) {
         try {
-            String[] commandAliases = aClass.getAnnotation(ACommand.class).commandAliases();
+            ACommandInfo aCommandInfo = aClass.getAnnotation(ACommandInfo.class);
+            String[] commandAliases = aCommandInfo.commandAliases();
             JDACommand JDACommand = ((Class<JDACommand>) aClass).getDeclaredConstructor().newInstance();
-            fullCommandList.add(aClass.getAnnotation(ACommand.class));
+            JDACommand.setCommandInfo(aCommandInfo);
+            fullCommandList.add(aCommandInfo);
+
+            if (!categories.contains(aCommandInfo.category())) {
+                categories.add(aCommandInfo.category());
+            }
 
             for (String commandAlias : commandAliases) {
                 commands.put(commandAlias, JDACommand);
@@ -45,7 +51,16 @@ public class CommandMap {
         }
     }
 
+    public void runCommand(String commandName) {
+        JDACommand jdaCommand = commands.get(commandName);
+
+    }
+
     public JDACommand getCommand(String commandName) {
         return commands.get(commandName);
+    }
+
+    public boolean isValidCommand(String commandName) {
+        return commands.get(commandName) != null;
     }
 }

@@ -15,6 +15,7 @@ public class CommandHandler extends ListenerAdapter {
 
         CommandReceivedEvent e = new CommandReceivedEvent(event);
         JDACommand JDACommand = commandMap.getCommand(e.getCommand());
+
         JDACommand.execute(e);
     }
 }

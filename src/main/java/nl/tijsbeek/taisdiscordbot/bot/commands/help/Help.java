@@ -1,10 +1,10 @@
 package nl.tijsbeek.taisdiscordbot.bot.commands.help;
 
-import nl.tijsbeek.taisdiscordbot.bot.commands.ACommand;
+import nl.tijsbeek.taisdiscordbot.bot.commands.ACommandInfo;
 import nl.tijsbeek.taisdiscordbot.bot.commands.CommandReceivedEvent;
 import nl.tijsbeek.taisdiscordbot.bot.commands.JDACommand;
 
-@ACommand(
+@ACommandInfo(
         commandAliases = {"help", "h"},
         category = "help",
         exampleCommand = "help",
