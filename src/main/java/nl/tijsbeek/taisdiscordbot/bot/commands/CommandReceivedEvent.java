@@ -16,8 +16,9 @@ public class CommandReceivedEvent {
     private final boolean hasArgs;
     private final String argsAsString;
 
-    private String prefix;
-    private String command;
+
+    private final String prefix;
+    private final String command;
 
     CommandReceivedEvent(MessageReceivedEvent event) {
         e = event;
@@ -60,7 +61,7 @@ public class CommandReceivedEvent {
         return e.getMessage();
     }
 
-    public boolean isFromGuild() {
+    public Boolean isFromGuild() {
         return e.isFromGuild();
     }
 
@@ -76,7 +77,7 @@ public class CommandReceivedEvent {
         return args;
     }
 
-    public boolean isHasArgs() {
+    public Boolean isHasArgs() {
         return hasArgs;
     }
 
@@ -144,5 +145,9 @@ public class CommandReceivedEvent {
         } catch (NumberFormatException ignore) {
             return -1L;
         }
+    }
+
+    public Boolean isBotModerator() {
+        return true;
     }
 }

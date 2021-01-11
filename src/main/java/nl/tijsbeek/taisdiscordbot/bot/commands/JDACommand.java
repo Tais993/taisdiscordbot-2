@@ -1,13 +1,16 @@
 package nl.tijsbeek.taisdiscordbot.bot.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import nl.tijsbeek.taisdiscordbot.database.DB;
 
 import java.awt.*;
 import java.time.Instant;
 
 public class JDACommand {
     ACommandInfo aCommandInfo;
+    CommandMap commandMap;
     CommandReceivedEvent e;
+    DB db;
 
     protected void execute(CommandReceivedEvent e) {
         e.getChannel().sendMessage("Something is wrong! Contact the creator.").queue();
@@ -41,6 +44,14 @@ public class JDACommand {
 
     public void setCommandInfo(ACommandInfo aCommandInfo) {
         this.aCommandInfo = aCommandInfo;
+    }
+
+    public void setCommandMap(CommandMap commandMap) {
+        this.commandMap = commandMap;
+    }
+
+    public void setDb(DB db) {
+        this.db = db;
     }
 
     public ACommandInfo getCommandInfo() {

@@ -10,4 +10,8 @@ public @interface ACommandInfo {
     String exampleCommand();
     String shortCommandDescription();
     String fullCommandDescription();
+
+    boolean guildOnly() default false;
+    boolean dmOnly() default false;
+    boolean botModeratorOnly() default false;
 }

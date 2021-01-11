@@ -35,8 +35,9 @@ public class CommandMap {
         try {
             ACommandInfo aCommandInfo = aClass.getAnnotation(ACommandInfo.class);
             String[] commandAliases = aCommandInfo.commandAliases();
-            JDACommand JDACommand = ((Class<JDACommand>) aClass).getDeclaredConstructor().newInstance();
-            JDACommand.setCommandInfo(aCommandInfo);
+            JDACommand jdaCommand = ((Class<JDACommand>) aClass).getDeclaredConstructor().newInstance();
+            jdaCommand.setCommandInfo(aCommandInfo);
+            jdaCommand.setCommandMap(this);
             fullCommandList.add(aCommandInfo);
 
             if (!categories.contains(aCommandInfo.category())) {
@@ -44,16 +45,26 @@ public class CommandMap {
             }
 
             for (String commandAlias : commandAliases) {
-                commands.put(commandAlias, JDACommand);
+                commands.put(commandAlias, jdaCommand);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void runCommand(String commandName) {
-        JDACommand jdaCommand = commands.get(commandName);
+    public void executeCommand(CommandReceivedEvent e) {
+        JDACommand jdaCommand = commands.get(e.getCommand());
 
+        ACommandInfo commandInfo = jdaCommand.getCommandInfo();
+        if (commandInfo.botModeratorOnly() && !e.isBotModerator()) {
+            // * If the person isn't a bot moderator, and a bot moderator is required it won't do anything
+        } else if (commandInfo.guildOnly() && e.isFromGuild()) {
+            jdaCommand.execute(e);
+        } else if (commandInfo.dmOnly() && !e.isFromGuild()) {
+            jdaCommand.execute(e);
+        } else {
+            jdaCommand.execute(e);
+        }
     }
 
     public JDACommand getCommand(String commandName) {

@@ -5,10 +5,8 @@ import java.util.HashMap;
 public class Guilds {
     private final HashMap<Long, String> guildPrefix = new HashMap<>();
 
-    private static final Guilds guilds = new Guilds();
-
-    private Guilds getInstance() {
-        return guilds;
+    public void addGuildPrefix(long guildId, String prefix) {
+        guildPrefix.put(guildId, prefix);
     }
 
     public String getGuildPrefix(long guildId) {
