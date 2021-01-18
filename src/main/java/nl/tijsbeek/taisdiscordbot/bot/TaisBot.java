@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import nl.tijsbeek.taisdiscordbot.bot.commands.CommandHandler;
-import nl.tijsbeek.taisdiscordbot.bot.commands.CommandMap;
 
 import javax.security.auth.login.LoginException;
 import javax.swing.filechooser.FileSystemView;

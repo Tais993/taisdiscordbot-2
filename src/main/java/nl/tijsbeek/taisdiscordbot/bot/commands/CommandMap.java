@@ -2,22 +2,20 @@ package nl.tijsbeek.taisdiscordbot.bot.commands;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
+import nl.tijsbeek.taisdiscordbot.database.DB;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class CommandMap {
     private final HashMap<String, JDACommand> commands = new HashMap<>();
     private final ArrayList<ACommandInfo> fullCommandList = new ArrayList<>();
     private final ArrayList<String> categories = new ArrayList<>();
 
-    private static final CommandMap commandMap = new CommandMap();
+    private final DB db;
 
-    public static CommandMap getInstance() {
-        return commandMap;
-    }
-
-    public CommandMap() {
+    public CommandMap(DB db) {
         new ClassGraph()
                 .acceptPackages("nl.tijsbeek.taisdiscordbot.bot.commands")
                 .enableAnnotationInfo()
@@ -25,6 +23,8 @@ public class CommandMap {
                 .getAllClasses().stream().filter(this::hasCommandAnnotation)
                 .map(ClassInfo::loadClass)
                 .forEach(this::addCommandClass);
+
+        this.db = db;
     }
 
     private boolean hasCommandAnnotation(ClassInfo classInfo) {
@@ -37,6 +37,7 @@ public class CommandMap {
             String[] commandAliases = aCommandInfo.commandAliases();
             JDACommand jdaCommand = ((Class<JDACommand>) aClass).getDeclaredConstructor().newInstance();
             jdaCommand.setCommandInfo(aCommandInfo);
+            jdaCommand.setDb(db);
             jdaCommand.setCommandMap(this);
             fullCommandList.add(aCommandInfo);
 
@@ -55,13 +56,19 @@ public class CommandMap {
     public void executeCommand(CommandReceivedEvent e) {
         JDACommand jdaCommand = commands.get(e.getCommand());
 
+        if (jdaCommand == null) {
+            return;
+        }
+
         ACommandInfo commandInfo = jdaCommand.getCommandInfo();
-        if (commandInfo.botModeratorOnly() && !e.isBotModerator()) {
-            // * If the person isn't a bot moderator, and a bot moderator is required it won't do anything
-        } else if (commandInfo.guildOnly() && e.isFromGuild()) {
+        if (e.isBotModerator()) {
             jdaCommand.execute(e);
-        } else if (commandInfo.dmOnly() && !e.isFromGuild()) {
-            jdaCommand.execute(e);
+        } else if (commandInfo.botModeratorOnly()) {
+            jdaCommand.botModeratorOnly(e);
+        } else if (commandInfo.guildOnly() && !e.isFromGuild()) {
+            jdaCommand.guildOnly(e);
+        } else if (commandInfo.dmOnly() && e.isFromGuild()) {
+            jdaCommand.dmOnly(e);
         } else {
             jdaCommand.execute(e);
         }
@@ -69,6 +76,24 @@ public class CommandMap {
 
     public JDACommand getCommand(String commandName) {
         return commands.get(commandName);
+    }
+
+    public ArrayList<ACommandInfo> getFullCommandList() {
+        return fullCommandList;
+    }
+
+    public ArrayList<String> getCategories() {
+        return categories;
+    }
+
+    public ArrayList<ACommandInfo> getCommandsCategory(String category) {
+        return (ArrayList<ACommandInfo>) fullCommandList.stream().filter(commandInfo -> {
+            return commandInfo.category().equalsIgnoreCase(category);
+        }).collect(Collectors.toList());
+    }
+
+    public boolean isValidCategory(String category) {
+        return categories.contains(category);
     }
 
     public boolean isValidCommand(String commandName) {

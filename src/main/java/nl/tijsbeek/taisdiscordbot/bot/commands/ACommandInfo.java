@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface ACommandInfo {
     String[] commandAliases();
     String category();
+    String pseudoCommand();
     String exampleCommand();
     String shortCommandDescription();
     String fullCommandDescription();

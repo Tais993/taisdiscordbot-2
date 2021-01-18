@@ -6,11 +6,14 @@ import nl.tijsbeek.taisdiscordbot.bot.commands.CommandReceivedEvent;
 import nl.tijsbeek.taisdiscordbot.bot.commands.JDACommand;
 
 @ACommandInfo(
-        commandAliases = {"test"},
+        commandAliases = {"test", "t"},
         category = "test",
+        pseudoCommand = "test",
         exampleCommand = "test",
         shortCommandDescription = "Testing",
-        fullCommandDescription = "Testing"
+        fullCommandDescription = """
+                Testing
+                """
 )
 public class Test extends JDACommand {
     @Override
@@ -19,8 +22,11 @@ public class Test extends JDACommand {
 
         Member member = e.getMember();
 
-        e.getChannel().sendMessage("Voice state is null: " + (member.getVoiceState() == null)).queue();
-        e.getChannel().sendMessage("Is In voice channel: " + member.getVoiceState().inVoiceChannel()).queue();
-        e.getChannel().sendMessage("In channel: " + member.getVoiceState().getChannel()).queue();
+        super.sendUnexpectedArgError("No Friends Found", 1, "Expecting a mentioned user");
+        super.sendUnexpectedArgError("No Friends Found", 1);
+
+//        e.getChannel().sendMessage("Voice state is null: " + (member.getVoiceState() == null)).queue();
+//        e.getChannel().sendMessage("Is In voice channel: " + member.getVoiceState().inVoiceChannel()).queue();
+//        e.getChannel().sendMessage("In channel: " + member.getVoiceState().getChannel()).queue();
     }
 }

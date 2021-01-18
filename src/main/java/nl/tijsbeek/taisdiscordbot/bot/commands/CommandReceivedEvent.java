@@ -20,11 +20,11 @@ public class CommandReceivedEvent {
     private final String prefix;
     private final String command;
 
-    CommandReceivedEvent(MessageReceivedEvent event) {
+    CommandReceivedEvent(MessageReceivedEvent event, String prefix) {
         e = event;
 
         ArrayList<String> args = new ArrayList<>(Arrays.asList(e.getMessage().getContentRaw().split("\\s+")));
-        prefix = args.get(0).charAt(0) + "";
+        this.prefix = prefix;
         command = args.get(0).replace(prefix, "");
         args.remove(0);
         if (args.size() >= 1) {
