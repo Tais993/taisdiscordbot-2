@@ -1,8 +1,11 @@
 package nl.tijsbeek.taisdiscordbot.bot.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.ISnowflake;
+import nl.tijsbeek.taisdiscordbot.bot.commands.help.JDAEntities;
 import nl.tijsbeek.taisdiscordbot.database.DB;
 
+import javax.swing.text.html.parser.Entity;
 import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,12 +36,22 @@ public class JDACommand {
         e.getChannel().sendMessage("This command is only for server moderators").queue();
     }
 
-    protected void sendError(String error) {
-        EmbedBuilder eb = getDefaultEmbed();
-        eb.setTitle("Error " + error);
+//    protected void sendError(String error) {
+//        EmbedBuilder eb = getDefaultEmbed();
+//        eb.setTitle("Error " + error);
+//
+//        eb.setDescription("```" + e.getPrefix() + getCommandInfo().pseudoCommand() + "\n");
+//        eb.appendDescription(e.getPrefix() + getCommandInfo().exampleCommand() + "```");
+//
+//        e.getChannel().sendMessage(eb.build()).queue();
+//    }
 
-        eb.setDescription("```" + e.getPrefix() + getCommandInfo().pseudoCommand() + "\n");
-        eb.appendDescription(e.getPrefix() + getCommandInfo().exampleCommand() + "```");
+    protected void sendCodeError(String error) {
+        EmbedBuilder eb = getDefaultEmbed();
+
+        eb.setTitle("There has been a error within the code");
+        eb.setDescription(error);
+        eb.appendDescription("Please report this to the bot creator!");
 
         e.getChannel().sendMessage(eb.build()).queue();
     }
@@ -55,9 +68,22 @@ public class JDACommand {
         return eb;
     }
 
-    protected void sendIncorrectError(String titleError , String invalidType) {
-        EmbedBuilder eb = getShortArgError(titleError);
+    protected void sendInvalidEntityError(Object object) {
+        JDAEntities entity = JDAEntities.valueOf(object);
+        if (entity == null) {
+            sendCodeError("Given object isn't a valid entity!");
+            return;
+        }
 
+        EmbedBuilder eb = getDefaultEmbed();
+
+        eb.setTitle("Invalid " + entity.getName() + "!");
+
+        eb.setDescription("```" + e.getPrefix() + getCommandInfo().pseudoCommand() + "\n");
+        eb.appendDescription(e.getPrefix() + getCommandInfo().exampleCommand() + "```");
+
+        eb.appendDescription("Either mention the " + entity.getName() + " or type the ID manually");
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     protected void sendUnexpectedArgError(String titleError, int atArg) {

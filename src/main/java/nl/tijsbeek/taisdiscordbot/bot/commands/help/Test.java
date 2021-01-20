@@ -22,8 +22,7 @@ public class Test extends JDACommand {
 
         Member member = e.getMember();
 
-        super.sendUnexpectedArgError("No Friends Found", 1, "Expecting a mentioned user");
-        super.sendUnexpectedArgError("No Friends Found", 1);
+        super.sendInvalidEntityError(JDAEntities.valueOf(member));
 
 //        e.getChannel().sendMessage("Voice state is null: " + (member.getVoiceState() == null)).queue();
 //        e.getChannel().sendMessage("Is In voice channel: " + member.getVoiceState().inVoiceChannel()).queue();
