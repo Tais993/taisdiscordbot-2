@@ -1,11 +1,9 @@
 package nl.tijsbeek.taisdiscordbot.bot.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.ISnowflake;
 import nl.tijsbeek.taisdiscordbot.bot.commands.help.JDAEntities;
 import nl.tijsbeek.taisdiscordbot.database.DB;
 
-import javax.swing.text.html.parser.Entity;
 import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;

@@ -7,7 +7,8 @@ import net.dv8tion.jda.api.entities.User;
 public enum JDAEntities {
     USER("user"),
     MEMBER("member"),
-    TEXTCHANNEL("text channel");
+    TEXTCHANNEL("text channel"),
+    NULL("NULL");
 
     String name;
 
@@ -24,27 +25,27 @@ public enum JDAEntities {
             return null;
         }
 
+        JDAEntities entity = NULL;
+
         try {
             Member member = (Member) object;
             System.out.println("It is a member");
-            return MEMBER;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
+            entity = MEMBER;
+        } catch (ClassCastException ignore) {}
 
         try {
             User user = (User) object;
             System.out.println("It is a user");
-            return USER;
+            entity = USER;
         } catch (ClassCastException ignore) {}
 
         try {
             TextChannel textChannel = (TextChannel) object;
             System.out.println("It is a textChannel");
-            return TEXTCHANNEL;
+            entity = TEXTCHANNEL;
         } catch (ClassCastException ignore) {}
 
-        System.out.println("None?");
-        return null;
+        System.out.println("" + entity.getName());
+        return entity;
     }
 }
